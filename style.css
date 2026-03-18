@@ -1,0 +1,264 @@
+:root {
+  --bg: #121212;
+  --surface: #242933;
+  --muted: #587e6e;
+  --text: #f2f2f2;
+  --accent: #aa6ae2;
+  --accent-dim: rgba(170, 106, 226, 0.12);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: "DM Mono", monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ── Background layers ── */
+
+/* 1. Noise texture via SVG filter */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.045;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 300px 300px;
+}
+
+/* 2. Accent-colored grid overlay */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 47px,
+      rgba(170, 106, 226, 0.055) 47px,
+      rgba(170, 106, 226, 0.055) 48px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 47px,
+      rgba(170, 106, 226, 0.055) 47px,
+      rgba(170, 106, 226, 0.055) 48px
+    );
+}
+
+/* ── Layout ── */
+.page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1.5rem;
+  gap: 2rem;
+}
+
+/* ── Glass card ── */
+.card {
+  width: min(560px, 100%);
+  padding: 2.5rem 2.75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-top-color: rgba(255, 255, 255, 0.13);
+  background: rgba(18, 18, 18, 0.2);
+  backdrop-filter: blur(8px) saturate(1.2);
+  -webkit-backdrop-filter: blur(8px) saturate(1.2);
+  position: relative;
+  overflow: hidden;
+
+  /* entrance animation */
+  opacity: 0;
+  transform: translateY(18px);
+  animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* top-edge glint */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 45%
+  );
+  pointer-events: none;
+}
+
+/* accent glow behind card */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: -40px;
+  background: radial-gradient(
+    ellipse at 70% 20%,
+    rgba(170, 106, 226, 0.07) 0%,
+    transparent 65%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Hero text ── */
+.name {
+  font-family: "DM Serif Display", serif;
+  font-size: clamp(2.4rem, 8vw, 3.6rem);
+  line-height: 1.05;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+  letter-spacing: -0.01em;
+}
+
+.name em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.handle {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.75rem;
+}
+
+.divider {
+  width: 2rem;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.4;
+  margin-bottom: 1.75rem;
+}
+
+.bio {
+  font-size: 0.85rem;
+  line-height: 1.8;
+  color: rgba(242, 242, 242, 0.72);
+  font-weight: 300;
+}
+
+/* ── Socials card ── */
+.socials-card {
+  width: min(560px, 100%);
+  padding: 1.5rem 2.75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-top-color: rgba(255, 255, 255, 0.1);
+  background: rgba(18, 18, 18, 0.2);
+  backdrop-filter: blur(8px) saturate(1.2);
+  -webkit-backdrop-filter: blur(8px) saturate(1.2);
+  position: relative;
+  overflow: hidden;
+
+  opacity: 0;
+  transform: translateY(18px);
+  animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+}
+
+.socials-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    transparent 45%
+  );
+  pointer-events: none;
+}
+
+.socials-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.socials-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(242, 242, 242, 0.7);
+  font-family: "DM Mono", monospace;
+  font-size: 0.72rem;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition:
+    border-color 0.2s,
+    color 0.2s,
+    background 0.2s;
+  cursor: pointer;
+}
+
+.pill:hover {
+  border-color: var(--accent);
+  color: var(--text);
+  background: var(--accent-dim);
+}
+
+.pill svg {
+  width: 13px;
+  height: 13px;
+  fill: currentColor;
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+/* ── Footer ── */
+.footer {
+  position: relative;
+  z-index: 1;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.15);
+  padding-bottom: 2rem;
+  text-align: center;
+}
